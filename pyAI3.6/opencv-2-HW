@@ -1,0 +1,33 @@
+import cv2
+
+cam = cv2.VideoCapture(0)
+
+stop = False
+
+width, height = 1280, 720
+
+rows, columns = 10, 10
+
+cam = cv2.VideoCapture(0)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+cam.set(cv2.CAP_PROP_FPS, 30)
+cam.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
+
+while not stop:
+
+    _, frame = cam.read()
+
+    grayFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    frame = cv2.resize(frame, (int(width/columns), int(height/columns)))
+
+    for i in range(rows):
+        for j in range(columns):
+            name = str(i) + "/" + str(j)
+            cv2.imshow(name, frame)
+
+            cv2.moveWindow(name, int(width/columns) * j, int(height/columns+30)*i)
+
+    if cv2.waitKey(1) & 0xff == ord('q'):
+        stop = True
